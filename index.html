@@ -154,10 +154,21 @@
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
 
-          const creasNome = item.creas.toUpperCase();
-          let resultadoTexto = `Esse bairro está na abrangência do ${creasNome}.\n\n`;
+          const creasNomeOriginal = item.creas;
+const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-          const dados = dadosCreas[creasNome];
+let resultadoTexto = `Esse bairro está na abrangência do ${creasNomeOriginal.toUpperCase()}.\n\n`;
+
+// Tenta encontrar correspondência "aproximada"
+let dados = null;
+for (const nome in dadosCreas) {
+  const nomeNormalizado = nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  if (nomeNormalizado.includes(creasNome)) {
+    dados = dadosCreas[nome];
+    break;
+  }
+}
+
           if (dados) {
             resultadoTexto += `${dados.endereco}\n${dados.cep}\n${dados.telefones}\n${dados.coordenadora}\n${dados.email}`;
           } else {
