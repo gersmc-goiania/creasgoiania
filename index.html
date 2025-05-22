@@ -155,22 +155,29 @@
           sugestoesEl.innerHTML = "";
 
           const creasNomeOriginal = item.creas;
-const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+          const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-let resultadoTexto = `Esse bairro está na abrangência do ${creasNomeOriginal.toUpperCase()}.\n\n`;
+          let resultadoTexto = `Esse bairro está na abrangência do ${creasNomeOriginal.toUpperCase()}.\n\n`;
 
-// Tenta encontrar correspondência "aproximada"
-let dados = null;
-for (const nome in dadosCreas) {
-  const nomeNormalizado = nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-  if (nomeNormalizado.includes(creasNome)) {
-    dados = dadosCreas[nome];
-    break;
-  }
-}
+          let dados = null;
+          for (const nome in dadosCreas) {
+            const nomeNormalizado = nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            if (nomeNormalizado.includes(creasNome)) {
+              dados = dadosCreas[nome];
+              break;
+            }
+          }
 
           if (dados) {
-            resultadoTexto += `${dados.endereco}\n${dados.cep}\n${dados.telefones}\n${dados.coordenadora}\n${dados.email}`;
+            const linhaUnica = [
+              dados.endereco,
+              dados.cep,
+              dados.telefones,
+              dados.coordenadora,
+              dados.email
+            ].filter(x => x).join(" | ");
+
+            resultadoTexto += linhaUnica;
           } else {
             resultadoTexto += `Dados do CREAS não encontrados.`;
           }
