@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta CREAS por Bairro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .cabecalho {
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    h2 {
+      text-align: center;
+      color: #1a3f78;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    ul#sugestoes {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    ul#sugestoes li {
+      padding: 8px;
+      cursor: pointer;
+    }
+    ul#sugestoes li:hover {
+      background-color: #f0f0f0;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cabecalho">
+    <div>Prefeitura de Goiânia</div>
+    <div>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</div>
+    <div>Diretoria de Proteção Social Especial</div>
+    <div>Gerência de Proteção Social de Média Complexidade</div>
+  </div>
+
+  <h2>Consulta de CREAS por Bairro</h2>
+
+  <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
+  <ul id="sugestoes"></ul>
+  <div id="resultado"></div>
+
+  <script>
+    const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
+    let dados = [];
+
+    async function carregarDados() {
+      const resposta = await fetch(urlCSV);
+      const texto = await resposta.text();
+
+      const linhas = texto.trim().split(/\r?\n/);
+      const cabecalho = linhas[0].split(',');
+
+      for (let i = 1; i < linhas.length; i++) {
+        const linha = linhas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
+        const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
+
+        if (bairro && creas) {
+          dados.push({ bairro, creas });
+        }
+      }
+    }
+
+    function mostrarSugestoes() {
+      const entrada = document.getElementById("bairroInput").value.trim().toLowerCase();
+      const sugestoesEl = document.getElementById("sugestoes");
+      const resultadoEl = document.getElementById("resultado");
+
+      sugestoesEl.innerHTML = "";
+      resultadoEl.textContent = "";
+
+      if (entrada === "") return;
+
+      const sugestoes = dados.filter(item => item.bairro.toLowerCase().includes(entrada));
+
+      sugestoes.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.bairro;
+        li.onclick = () => {
+          document.getElementById("bairroInput").value = item.bairro;
+          sugestoesEl.innerHTML = "";
+          resultadoEl.textContent = item.creas.toUpperCase();
+        };
+        sugestoesEl.appendChild(li);
+      });
+    }
+
+    carregarDados();
+  </script>
+
+</body>
+</html>
