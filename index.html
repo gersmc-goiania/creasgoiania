@@ -3,67 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <title>Consulta CREAS por Bairro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4; /* Fundo cinza claro */
-      padding: 30px;
-      max-width: 600px;
-      margin: auto;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 700px;
     }
+
     header {
       text-align: center;
       margin-bottom: 20px;
-      line-height: 1.4;
     }
-    header h1 {
-      font-size: 18px;
-      margin: 0;
+
+    header h1, header h2, header h3, header h4 {
+      margin: 2px;
+      font-weight: normal;
     }
-    h2 {
+
+    h2#titulo {
       text-align: center;
-      margin-bottom: 20px;
+      margin-top: 30px;
+      font-size: 24px;
     }
+
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
+
     ul#sugestoes {
       list-style: none;
       padding: 0;
       margin-top: 10px;
       border: 1px solid #ccc;
+      border-radius: 4px;
       max-height: 150px;
       overflow-y: auto;
-      background-color: #fff;
     }
+
     ul#sugestoes li {
-      padding: 8px;
+      padding: 10px;
       cursor: pointer;
     }
+
     ul#sugestoes li:hover {
       background-color: #f0f0f0;
     }
+
     #resultado {
       margin-top: 20px;
       font-size: 18px;
-      font-weight: bold;
-      color: green;
+      font-weight: normal;
       text-align: center;
+    }
+
+    .creas-nome {
+      color: green;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2#titulo {
+        font-size: 20px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #resultado {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <p>Prefeitura de Goiânia</p>
-    <p>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</p>
-    <p>Diretoria de Proteção Social Especial</p>
-    <p>Gerência de Proteção Social de Média Complexidade</p>
+    <h1>Prefeitura de Goiânia</h1>
+    <h2>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</h2>
+    <h3>Diretoria de Proteção Social Especial</h3>
+    <h4>Gerência de Proteção Social de Média Complexidade</h4>
   </header>
 
-  <h2>Consulta de CREAS por Bairro</h2>
+  <h2 id="titulo">Consulta de CREAS por Bairro</h2>
 
   <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
   <ul id="sugestoes"></ul>
@@ -82,10 +115,7 @@
         const linha = linhas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
         const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
-
-        if (bairro && creas) {
-          dados.push({ bairro, creas });
-        }
+        if (bairro && creas) dados.push({ bairro, creas });
       }
     }
 
@@ -107,7 +137,7 @@
         li.onclick = () => {
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
-          resultadoEl.textContent = `Esse bairro está na abrangência do ${item.creas.toUpperCase()}`;
+          resultadoEl.innerHTML = `Esse bairro está na abrangência do CREAS <span class="creas-nome">${item.creas.toUpperCase()}</span>.`;
         };
         sugestoesEl.appendChild(li);
       });
