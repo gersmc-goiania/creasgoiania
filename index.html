@@ -57,10 +57,10 @@
 <body>
 
   <header>
-    <h1>Prefeitura de Goiânia</h1>
-    <h1>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</h1>
-    <h1>Diretoria de Proteção Social Especial</h1>
-    <h1>Gerência de Proteção Social de Média Complexidade</h1>
+    <p>Prefeitura de Goiânia</p>
+    <p>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</p>
+    <p>Diretoria de Proteção Social Especial</p>
+    <p>Gerência de Proteção Social de Média Complexidade</p>
   </header>
 
   <h2>Consulta de CREAS por Bairro</h2>
@@ -107,7 +107,7 @@
         li.onclick = () => {
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
-          resultadoEl.textContent = `Esse bairro está na abrangência do CREAS ${item.creas.toUpperCase()}`;
+          resultadoEl.textContent = `Esse bairro está na abrangência do ${item.creas.toUpperCase()}`;
         };
         sugestoesEl.appendChild(li);
       });
