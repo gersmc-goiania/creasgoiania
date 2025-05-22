@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -155,13 +156,13 @@
           sugestoesEl.innerHTML = "";
 
           const creasNomeOriginal = item.creas;
-          const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+          const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
-          let resultadoTexto = `Esse bairro está na abrangência do ${creasNomeOriginal.toUpperCase()}.\n\n`;
+          let resultadoTexto = `Esse bairro está na abrangência do <span class="creas-nome">${creasNomeOriginal.toUpperCase()}</span>.<br><br>`;
 
           let dados = null;
           for (const nome in dadosCreas) {
-            const nomeNormalizado = nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            const nomeNormalizado = nome.normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
             if (nomeNormalizado.includes(creasNome)) {
               dados = dadosCreas[nome];
               break;
@@ -176,13 +177,12 @@
               dados.coordenadora,
               dados.email
             ].filter(x => x).join(" | ");
-
             resultadoTexto += linhaUnica;
           } else {
             resultadoTexto += `Dados do CREAS não encontrados.`;
           }
 
-          resultadoEl.innerText = resultadoTexto;
+          resultadoEl.innerHTML = resultadoTexto;
         };
         sugestoesEl.appendChild(li);
       });
