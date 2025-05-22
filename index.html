@@ -3,42 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <title>Consulta CREAS por Bairro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 30px;
+      padding: 20px;
+      margin: 0 auto;
       max-width: 700px;
-      margin: auto;
     }
-    .cabecalho {
+
+    header {
       text-align: center;
-      line-height: 1.6;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-    h2 {
+
+    header h1, header h2, header h3, header h4 {
+      margin: 2px;
+      font-weight: normal;
+    }
+
+    h2#titulo {
       text-align: center;
-      color: #1a3f78;
+      margin-top: 30px;
+      font-size: 24px;
     }
+
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
+
     ul#sugestoes {
       list-style: none;
       padding: 0;
       margin-top: 10px;
       border: 1px solid #ccc;
+      border-radius: 4px;
       max-height: 150px;
       overflow-y: auto;
     }
+
     ul#sugestoes li {
-      padding: 8px;
+      padding: 10px;
       cursor: pointer;
     }
+
     ul#sugestoes li:hover {
       background-color: #f0f0f0;
     }
+
     #resultado {
       margin-top: 20px;
       font-size: 20px;
@@ -46,18 +63,36 @@
       color: green;
       text-align: center;
     }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2#titulo {
+        font-size: 20px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #resultado {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="cabecalho">
-    <div>Prefeitura de Goiânia</div>
-    <div>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</div>
-    <div>Diretoria de Proteção Social Especial</div>
-    <div>Gerência de Proteção Social de Média Complexidade</div>
-  </div>
+  <header>
+    <h1>Prefeitura de Goiânia</h1>
+    <h2>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</h2>
+    <h3>Diretoria de Proteção Social Especial</h3>
+    <h4>Gerência de Proteção Social de Média Complexidade</h4>
+  </header>
 
-  <h2>Consulta de CREAS por Bairro</h2>
+  <h2 id="titulo">Consulta de CREAS por Bairro</h2>
 
   <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
   <ul id="sugestoes"></ul>
@@ -72,16 +107,11 @@
       const texto = await resposta.text();
 
       const linhas = texto.trim().split(/\r?\n/);
-      const cabecalho = linhas[0].split(',');
-
       for (let i = 1; i < linhas.length; i++) {
         const linha = linhas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
         const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
-
-        if (bairro && creas) {
-          dados.push({ bairro, creas });
-        }
+        if (bairro && creas) dados.push({ bairro, creas });
       }
     }
 
