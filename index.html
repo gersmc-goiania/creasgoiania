@@ -61,6 +61,7 @@
       font-size: 18px;
       font-weight: normal;
       text-align: center;
+      white-space: pre-line;
     }
 
     .creas-nome {
@@ -103,19 +104,32 @@
   <div id="resultado"></div>
 
   <script>
-    const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
-    let dados = [];
+    const urlBairros = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
+    const urlCreas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRWxiE1xElemwD02wqCOATxk-JmhRVz48XvxKoGMfSSqHmo4_fpYiLpaj4ZVvxqB_CCabA9uBC5nbQX/pub?gid=0&single=true&output=csv";
+
+    let dadosBairros = [];
+    let dadosCreas = {};
 
     async function carregarDados() {
-      const resposta = await fetch(urlCSV);
-      const texto = await resposta.text();
+      const [resBairros, resCreas] = await Promise.all([fetch(urlBairros), fetch(urlCreas)]);
+      const textoBairros = await resBairros.text();
+      const textoCreas = await resCreas.text();
 
-      const linhas = texto.trim().split(/\r?\n/);
-      for (let i = 1; i < linhas.length; i++) {
-        const linha = linhas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      const linhasBairros = textoBairros.trim().split(/\r?\n/);
+      for (let i = 1; i < linhasBairros.length; i++) {
+        const linha = linhasBairros[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
         const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
-        if (bairro && creas) dados.push({ bairro, creas });
+        if (bairro && creas) dadosBairros.push({ bairro, creas });
+      }
+
+      const linhasCreas = textoCreas.trim().split(/\r?\n/);
+      for (let i = 1; i < linhasCreas.length; i++) {
+        const linha = linhasCreas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/(^"|"$)/g, "").trim());
+        const [nome, endereco, cep, telefones, coordenadora, email] = linha;
+        if (nome) {
+          dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
+        }
       }
     }
 
@@ -125,11 +139,13 @@
       const resultadoEl = document.getElementById("resultado");
 
       sugestoesEl.innerHTML = "";
-      resultadoEl.textContent = "";
+      resultadoEl.innerHTML = "";
 
       if (entrada === "") return;
 
-      const sugestoes = dados.filter(item => item.bairro.toLowerCase().includes(entrada));
+      const sugestoes = dadosBairros
+        .filter(item => item.bairro.toLowerCase().includes(entrada))
+        .sort((a, b) => a.bairro.localeCompare(b.bairro));
 
       sugestoes.forEach(item => {
         const li = document.createElement("li");
@@ -137,7 +153,18 @@
         li.onclick = () => {
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
-          resultadoEl.innerHTML = `Esse bairro está na abrangência do <span class="creas-nome">${item.creas.toUpperCase()}</span>.`;
+
+          const creasNome = item.creas.toUpperCase();
+          let resultadoTexto = `Esse bairro está na abrangência do ${creasNome}.\n\n`;
+
+          const dados = dadosCreas[creasNome];
+          if (dados) {
+            resultadoTexto += `${dados.endereco}\n${dados.cep}\n${dados.telefones}\n${dados.coordenadora}\n${dados.email}`;
+          } else {
+            resultadoTexto += `Dados do CREAS não encontrados.`;
+          }
+
+          resultadoEl.innerText = resultadoTexto;
         };
         sugestoesEl.appendChild(li);
       });
