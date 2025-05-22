@@ -6,18 +6,23 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4; /* Fundo cinza claro */
       padding: 30px;
-      max-width: 700px;
+      max-width: 600px;
       margin: auto;
     }
-    .cabecalho {
+    header {
       text-align: center;
-      line-height: 1.6;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    header h1 {
+      font-size: 18px;
+      margin: 0;
     }
     h2 {
       text-align: center;
-      color: #1a3f78;
+      margin-bottom: 20px;
     }
     input {
       width: 100%;
@@ -31,6 +36,7 @@
       border: 1px solid #ccc;
       max-height: 150px;
       overflow-y: auto;
+      background-color: #fff;
     }
     ul#sugestoes li {
       padding: 8px;
@@ -41,7 +47,7 @@
     }
     #resultado {
       margin-top: 20px;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: green;
       text-align: center;
@@ -50,12 +56,12 @@
 </head>
 <body>
 
-  <div class="cabecalho">
-    <div>Prefeitura de Goiânia</div>
-    <div>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</div>
-    <div>Diretoria de Proteção Social Especial</div>
-    <div>Gerência de Proteção Social de Média Complexidade</div>
-  </div>
+  <header>
+    <h1>Prefeitura de Goiânia</h1>
+    <h1>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</h1>
+    <h1>Diretoria de Proteção Social Especial</h1>
+    <h1>Gerência de Proteção Social de Média Complexidade</h1>
+  </header>
 
   <h2>Consulta de CREAS por Bairro</h2>
 
@@ -72,8 +78,6 @@
       const texto = await resposta.text();
 
       const linhas = texto.trim().split(/\r?\n/);
-      const cabecalho = linhas[0].split(',');
-
       for (let i = 1; i < linhas.length; i++) {
         const linha = linhas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
@@ -103,7 +107,7 @@
         li.onclick = () => {
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
-          resultadoEl.textContent = item.creas.toUpperCase();
+          resultadoEl.textContent = `Esse bairro está na abrangência do CREAS ${item.creas.toUpperCase()}`;
         };
         sugestoesEl.appendChild(li);
       });
