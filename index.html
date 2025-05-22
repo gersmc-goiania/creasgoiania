@@ -137,7 +137,7 @@
         li.onclick = () => {
           document.getElementById("bairroInput").value = item.bairro;
           sugestoesEl.innerHTML = "";
-          resultadoEl.innerHTML = `Esse bairro está na abrangência do CREAS <span class="creas-nome">${item.creas.toUpperCase()}</span>.`;
+          resultadoEl.innerHTML = `Esse bairro está na abrangência do <span class="creas-nome">${item.creas.toUpperCase()}</span>.`;
         };
         sugestoesEl.appendChild(li);
       });
