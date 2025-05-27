@@ -69,18 +69,6 @@
       font-weight: bold;
     }
 
-    #mapa {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: 0;
-      border-radius: 8px;
-    }
-
     @media (max-width: 600px) {
       body {
         padding: 15px;
@@ -96,10 +84,6 @@
 
       #resultado {
         font-size: 16px;
-      }
-
-      iframe {
-        height: 250px;
       }
     }
   </style>
@@ -118,9 +102,6 @@
 <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
 <ul id="sugestoes"></ul>
 <div id="resultado"></div>
-<div id="mapa">
-  <iframe id="iframeMapa" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-</div>
 
 <script>
   const urlBairros = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
@@ -181,28 +162,30 @@
         let dados = null;
         for (const nome in dadosCreas) {
           const nomeNormalizado = nome.normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
-          if (nomeNormalizado === creasNome) {
+          if (nomeNormalizado.includes(creasNome)) {
             dados = dadosCreas[nome];
             break;
           }
         }
 
         if (dados) {
-          resultadoTexto += `
-            <br><strong>Endereço:</strong> ${dados.endereco}
-            <br><strong>CEP:</strong> ${dados.cep}
-            <br><strong>Telefones:</strong> ${dados.telefones}
-            <br><strong>Coordenadora:</strong> ${dados.coordenadora}
-            <br><strong>Email:</strong> ${dados.email}
-          `;
+          const linhaUnica = [
+            dados.endereco,
+            dados.cep,
+            dados.telefones,
+            dados.coordenadora,
+            dados.email
+          ].filter(x => x && x !== "undefined").join(" | ");
+          resultadoTexto += linhaUnica;
         } else {
           resultadoTexto += `Dados do CREAS não encontrados.`;
         }
 
-        resultadoEl.innerHTML = resultadoTexto;
+        const enderecoMapa = `${item.bairro}, Goiânia - GO`.replace(/ /g, "+");
+        resultadoTexto += `<br><br><iframe width="100%" height="300" style="border:0" loading="lazy"
+          src="https://www.google.com/maps?q=${enderecoMapa}&output=embed"></iframe>`;
 
-        const iframeMapa = document.getElementById("iframeMapa");
-        iframeMapa.src = `https://www.google.com/maps?q=${encodeURIComponent(item.bairro + ", Goiânia, Goiás")}&output=embed`;
+        resultadoEl.innerHTML = resultadoTexto;
       };
       sugestoesEl.appendChild(li);
     });
@@ -213,4 +196,5 @@
 
 </body>
 </html>
+
 
