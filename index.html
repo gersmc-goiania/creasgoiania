@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -19,10 +18,9 @@
     }
 
     header p {
-  margin: 0;
-  line-height: 1.2;
-}
-
+      margin: 0;
+      line-height: 1.2;
+    }
 
     h2#titulo {
       text-align: center;
@@ -71,6 +69,18 @@
       font-weight: bold;
     }
 
+    #mapa {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: 0;
+      border-radius: 8px;
+    }
+
     @media (max-width: 600px) {
       body {
         padding: 15px;
@@ -87,111 +97,120 @@
       #resultado {
         font-size: 16px;
       }
+
+      iframe {
+        height: 250px;
+      }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT_xEU58rn8c3txTSjlbnqSGikBL43bYnQFFJkv2KyhnCcu4hEW" alt="Prefeitura de Goiânia" width="100"; style="max-width: 200px; margin-bottom: 10px;">
+  <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT_xEU58rn8c3txTSjlbnqSGikBL43bYnQFFJkv2KyhnCcu4hEW" alt="Prefeitura de Goiânia" width="100" style="max-width: 200px; margin-bottom: 10px;">
   <p>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</p>
   <p>Diretoria de Proteção Social Especial</p>
   <p>Gerência de Proteção Social de Média Complexidade</p>
 </header>
 
+<h2 id="titulo">Consulta de CREAS por Bairro</h2>
 
-  <h2 id="titulo">Consulta de CREAS por Bairro</h2>
+<input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
+<ul id="sugestoes"></ul>
+<div id="resultado"></div>
+<div id="mapa">
+  <iframe id="iframeMapa" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
 
-  <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
-  <ul id="sugestoes"></ul>
-  <div id="resultado"></div>
+<script>
+  const urlBairros = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
+  const urlCreas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRWxiE1xElemwD02wqCOATxk-JmhRVz48XvxKoGMfSSqHmo4_fpYiLpaj4ZVvxqB_CCabA9uBC5nbQX/pub?gid=0&single=true&output=csv";
 
-  <script>
-    const urlBairros = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
-    const urlCreas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRWxiE1xElemwD02wqCOATxk-JmhRVz48XvxKoGMfSSqHmo4_fpYiLpaj4ZVvxqB_CCabA9uBC5nbQX/pub?gid=0&single=true&output=csv";
+  let dadosBairros = [];
+  let dadosCreas = {};
 
-    let dadosBairros = [];
-    let dadosCreas = {};
+  async function carregarDados() {
+    const [resBairros, resCreas] = await Promise.all([fetch(urlBairros), fetch(urlCreas)]);
+    const textoBairros = await resBairros.text();
+    const textoCreas = await resCreas.text();
 
-    async function carregarDados() {
-      const [resBairros, resCreas] = await Promise.all([fetch(urlBairros), fetch(urlCreas)]);
-      const textoBairros = await resBairros.text();
-      const textoCreas = await resCreas.text();
+    const linhasBairros = textoBairros.trim().split(/\r?\n/);
+    for (let i = 1; i < linhasBairros.length; i++) {
+      const linha = linhasBairros[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
+      const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
+      if (bairro && creas) dadosBairros.push({ bairro, creas });
+    }
 
-      const linhasBairros = textoBairros.trim().split(/\r?\n/);
-      for (let i = 1; i < linhasBairros.length; i++) {
-        const linha = linhasBairros[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-        const bairro = linha[0]?.replace(/(^"|"$)/g, "").trim();
-        const creas = linha[1]?.replace(/(^"|"$)/g, "").trim();
-        if (bairro && creas) dadosBairros.push({ bairro, creas });
+    const linhasCreas = textoCreas.trim().split(/\r?\n/);
+    for (let i = 1; i < linhasCreas.length; i++) {
+      const linha = linhasCreas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/(^"|"$)/g, "").trim());
+      const [nome, endereco, cep, telefones, coordenadora, email] = linha;
+      if (nome) {
+        dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
       }
+    }
+  }
 
-      const linhasCreas = textoCreas.trim().split(/\r?\n/);
-      for (let i = 1; i < linhasCreas.length; i++) {
-        const linha = linhasCreas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/(^"|"$)/g, "").trim());
-        const [nome, endereco, cep, telefones, coordenadora, email] = linha;
-        if (nome) {
-          dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
+  function mostrarSugestoes() {
+    const entrada = document.getElementById("bairroInput").value.trim().toLowerCase();
+    const sugestoesEl = document.getElementById("sugestoes");
+    const resultadoEl = document.getElementById("resultado");
+
+    sugestoesEl.innerHTML = "";
+    resultadoEl.innerHTML = "";
+
+    if (entrada === "") return;
+
+    const sugestoes = dadosBairros
+      .filter(item => item.bairro.toLowerCase().includes(entrada))
+      .sort((a, b) => a.bairro.localeCompare(b.bairro));
+
+    sugestoes.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.bairro;
+      li.onclick = () => {
+        document.getElementById("bairroInput").value = item.bairro;
+        sugestoesEl.innerHTML = "";
+
+        const creasNomeOriginal = item.creas;
+        const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+        let resultadoTexto = `Esse bairro está na abrangência do <span class="creas-nome">${creasNomeOriginal.toUpperCase()}</span>.<br><br>`;
+
+        let dados = null;
+        for (const nome in dadosCreas) {
+          const nomeNormalizado = nome.normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+          if (nomeNormalizado === creasNome) {
+            dados = dadosCreas[nome];
+            break;
+          }
         }
-      }
-    }
 
-    function mostrarSugestoes() {
-      const entrada = document.getElementById("bairroInput").value.trim().toLowerCase();
-      const sugestoesEl = document.getElementById("sugestoes");
-      const resultadoEl = document.getElementById("resultado");
+        if (dados) {
+          resultadoTexto += `
+            <br><strong>Endereço:</strong> ${dados.endereco}
+            <br><strong>CEP:</strong> ${dados.cep}
+            <br><strong>Telefones:</strong> ${dados.telefones}
+            <br><strong>Coordenadora:</strong> ${dados.coordenadora}
+            <br><strong>Email:</strong> ${dados.email}
+          `;
+        } else {
+          resultadoTexto += `Dados do CREAS não encontrados.`;
+        }
 
-      sugestoesEl.innerHTML = "";
-      resultadoEl.innerHTML = "";
+        resultadoEl.innerHTML = resultadoTexto;
 
-      if (entrada === "") return;
+        const iframeMapa = document.getElementById("iframeMapa");
+        iframeMapa.src = `https://www.google.com/maps?q=${encodeURIComponent(item.bairro + ", Goiânia, Goiás")}&output=embed`;
+      };
+      sugestoesEl.appendChild(li);
+    });
+  }
 
-      const sugestoes = dadosBairros
-        .filter(item => item.bairro.toLowerCase().includes(entrada))
-        .sort((a, b) => a.bairro.localeCompare(b.bairro));
-
-      sugestoes.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item.bairro;
-        li.onclick = () => {
-          document.getElementById("bairroInput").value = item.bairro;
-          sugestoesEl.innerHTML = "";
-
-          const creasNomeOriginal = item.creas;
-          const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
-
-          let resultadoTexto = `Esse bairro está na abrangência do <span class="creas-nome">${creasNomeOriginal.toUpperCase()}</span>.<br><br>`;
-
-          let dados = null;
-          for (const nome in dadosCreas) {
-            const nomeNormalizado = nome.normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
-            if (nomeNormalizado.includes(creasNome)) {
-              dados = dadosCreas[nome];
-              break;
-            }
-          }
-
-          if (dados) {
-            const linhaUnica = [
-              dados.endereco,
-              dados.cep,
-              dados.telefones,
-              dados.coordenadora,
-              dados.email
-            ].filter(x => x).join(" | ");
-            resultadoTexto += linhaUnica;
-          } else {
-            resultadoTexto += `Dados do CREAS não encontrados.`;
-          }
-
-          resultadoEl.innerHTML = resultadoTexto;
-        };
-        sugestoesEl.appendChild(li);
-      });
-    }
-
-    carregarDados();
-  </script>
+  carregarDados();
+</script>
 
 </body>
 </html>
+
