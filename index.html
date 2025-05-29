@@ -138,9 +138,12 @@
       if (creasInfo) {
         html += `<p><strong>Endereço:</strong> ${creasInfo.endereco}</p>`;
         html += `<p><strong>Telefone:</strong> ${creasInfo.telefone}</p>`;
-        html += `<iframe src="${creasInfo.link}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+        if (creasInfo.link) {
+          html += `<iframe src="${creasInfo.link}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+        }
       }
       document.getElementById("resultado").innerHTML = html;
+      document.getElementById("sugestoes").innerHTML = "";
     }
 
     document.getElementById("creasSelect").addEventListener("change", function () {
