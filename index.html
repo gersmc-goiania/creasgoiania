@@ -5,6 +5,38 @@
   <title>Consulta CREAS por Bairro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="consulta.css">
+  <style>
+    .tabs {
+      display: flex;
+      margin: 20px 0;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      background-color: #f9f9f9;
+      margin-right: 5px;
+    }
+
+    .tab.active {
+      background-color: white;
+      border-top: 2px solid #007BFF;
+      border-left: 2px solid #007BFF;
+      border-right: 2px solid #007BFF;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,11 +47,27 @@
   <p>Gerência de Proteção Social de Média Complexidade</p>
 </header>
 
-<h2 id="titulo">Consulta de CREAS por Bairro</h2>
+<div class="tabs">
+  <div class="tab active" onclick="trocarAba('aba1')">Buscar por Bairro</div>
+  <div class="tab" onclick="trocarAba('aba2')">Buscar por CREAS</div>
+</div>
 
-<input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
-<ul id="sugestoes"></ul>
-<div id="resultado"></div>
+<!-- Aba 1 -->
+<div id="aba1" class="tab-content active">
+  <h2 id="titulo">Consulta de CREAS por Bairro</h2>
+  <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
+  <ul id="sugestoes"></ul>
+  <div id="resultado"></div>
+</div>
+
+<!-- Aba 2 -->
+<div id="aba2" class="tab-content">
+  <h2>Lista de Bairros por CREAS</h2>
+  <select id="creasSelect" onchange="mostrarBairrosPorCreas()">
+    <option value="">Selecione um CREAS...</option>
+  </select>
+  <ul id="bairrosPorCreas"></ul>
+</div>
 
 <script>
   const urlBairros = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4TZkD-YhQkE9yOJ0rc0AFitqzPI8KUTaGglAljxg2oVDy_GM_9QnZBtEGMJELY_uhhMfPDtKwhspX/pub?gid=579319961&single=true&output=csv";
@@ -49,6 +97,16 @@
         dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
       }
     }
+
+    // Preencher o select com nomes dos CREAS
+    const creasSet = new Set(dadosBairros.map(d => d.creas));
+    const creasSelect = document.getElementById("creasSelect");
+    [...creasSet].sort().forEach(creas => {
+      const opt = document.createElement("option");
+      opt.value = creas;
+      opt.textContent = creas;
+      creasSelect.appendChild(opt);
+    });
   }
 
   function mostrarSugestoes() {
@@ -109,10 +167,39 @@
     });
   }
 
+  function mostrarBairrosPorCreas() {
+    const selecionado = document.getElementById("creasSelect").value;
+    const lista = document.getElementById("bairrosPorCreas");
+    lista.innerHTML = "";
+
+    if (!selecionado) return;
+
+    const bairros = dadosBairros
+      .filter(item => item.creas === selecionado)
+      .map(item => item.bairro)
+      .sort();
+
+    if (bairros.length === 0) {
+      lista.innerHTML = "<li>Nenhum bairro encontrado.</li>";
+    } else {
+      bairros.forEach(bairro => {
+        const li = document.createElement("li");
+        li.textContent = bairro;
+        lista.appendChild(li);
+      });
+    }
+  }
+
+  function trocarAba(abaId) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
+
+    document.querySelector(`.tab[onclick="trocarAba('${abaId}')"]`).classList.add('active');
+    document.getElementById(abaId).classList.add('active');
+  }
+
   carregarDados();
 </script>
 
 </body>
 </html>
-
-
