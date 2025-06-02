@@ -1,0 +1,81 @@
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 700px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header p {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h2#titulo {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 24px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    ul#sugestoes {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    ul#sugestoes li {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    ul#sugestoes li:hover {
+      background-color: #f0f0f0;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: normal;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .creas-nome {
+      color: green;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2#titulo {
+        font-size: 20px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #resultado {
+        font-size: 16px;
+      }
+    }
