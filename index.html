@@ -102,9 +102,9 @@
     const linhasCreas = textoCreas.trim().split(/\r?\n/);
     for (let i = 1; i < linhasCreas.length; i++) {
       const linha = linhasCreas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/(^"|"$)/g, "").trim());
-      const [nome, endereco, cep, telefones, coordenadora, email, link] = linha;
+      const [nome, endereco, cep, telefones, coordenadora, email] = linha;
       if (nome) {
-        dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email, link };
+        dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
       }
     }
 
@@ -144,10 +144,6 @@
         const creasNome = creasNomeOriginal.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
         let resultadoTexto = `Esse bairro está na abrangência do <span class="creas-nome">${creasNomeOriginal.toUpperCase()}</span>.<br><br>`;
-        // Se houver link, adiciona o "clique aqui"
-            if (dados.link) {
-              resultadoTexto += `<br><br>📍 Localização do CREAS: <a href="${dados.link}" target="_blank">clique aqui</a>`;
-            }
 
         let dados = null;
         for (const nome in dadosCreas) {
