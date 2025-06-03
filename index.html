@@ -102,9 +102,9 @@
     const linhasCreas = textoCreas.trim().split(/\r?\n/);
     for (let i = 1; i < linhasCreas.length; i++) {
       const linha = linhasCreas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/(^"|"$)/g, "").trim());
-      const [nome, endereco, cep, telefones, coordenadora, email] = linha;
+      const [nome, bloco, link] = linha;
       if (nome) {
-        dadosCreas[nome.toUpperCase()] = { endereco, cep, telefones, coordenadora, email };
+        dadosCreas[nome.toUpperCase()] = { bloco, link };
       }
     }
 
@@ -154,18 +154,16 @@
           }
         }
 
-        if (dados) {
-          const linhaUnica = [
-            dados.endereco,
-            dados.cep,
-            dados.telefones,
-            dados.coordenadora,
-            dados.email
-          ].filter(x => x && x !== "undefined").join(" | ");
-          resultadoTexto += linhaUnica;
-        } else {
-          resultadoTexto += `Dados do CREAS não encontrados.`;
-        }
+          if (dados) {
+            resultadoTexto += dados.bloco;
+          
+            if (dados.link) {
+              resultadoTexto += `<br><br>📍 Localização do CREAS: <a href="${dados.link}" target="_blank">clique aqui</a>`;
+            }
+          } else {
+            resultadoTexto += `Dados do CREAS não encontrados.`;
+          }
+
 
         const enderecoMapa = `${item.bairro}, Goiânia - GO`.replace(/ /g, "+");
         resultadoTexto += `<br><br><iframe width="100%" height="300" style="border:0" loading="lazy"
