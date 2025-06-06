@@ -15,7 +15,13 @@
       line-height: 1.2;
     }
 
-    h2#titulo {
+    h2#titulo-bairro {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    h2#titulo-creas {
       text-align: center;
       margin-top: 30px;
       font-size: 20px;
