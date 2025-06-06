@@ -81,8 +81,8 @@
     }
 
 h1#nomedosite {
-    text-align = center
-    color = green
+    text-align: center;
+    color: green;
 }
 
 
