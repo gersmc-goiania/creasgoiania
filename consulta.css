@@ -80,8 +80,9 @@
       }
     }
 
-#Titulo {
+h1#Titulo {
     text-align = center
+    color = green
 }
 
 
