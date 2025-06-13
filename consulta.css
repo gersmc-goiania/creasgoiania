@@ -1,0 +1,266 @@
+    body {
+      font-family: arial, sans-serif;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 700px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    header p {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h1#logomarca {
+      text-align: center;
+      margin-top: 0;
+      font-size: 30px;
+      padding: 30px;
+      color: #fff;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      background-image: url('Imagens/logomarca-cutout.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    h2#titulo-bairro {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    h2#titulo-creas {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    input {
+      font-size: 16px;
+      padding: 10px 35px 10px 35px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 700px;
+      background: #fff url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat 10px center;
+      background-size: 20px 20px;
+      box-sizing: border-box;
+    }
+
+    ul#sugestoes {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    ul#sugestoes li {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    ul#sugestoes li:hover {
+      background-color: #f0f0f0;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: normal;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .creas-nome {
+      color: green;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2#titulo {
+        font-size: 20px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #resultado {
+        font-size: 16px;
+      }
+    }
+
+        h1#site {
+            text-align: center;
+        }
+
+             .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      margin-right: 5px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      border-radius: 25px;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      transition: color 0.3s ease;      
+    }
+
+    .tab:not(.active):hover {
+      color: #3BCE8F;
+    }
+
+    .tab.active {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      border-bottom: none;
+      margin-right: 5px;
+      font-size: 16px;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      background-image: url('Imagens/logomarca-cutout.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 25px;
+      font-weight: bold;
+      color: #fff;     
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    #creasSelect1 {
+      font-size: 16px;
+      border-radius: 25px;
+      justify-content: center;
+      padding: 5px;
+    }
+
+    #creasSelect2 {
+      font-size: 16px;
+      border-radius: 25px;
+      justify-content: center;
+      padding: 5px;
+      min-width: 300px;
+      color: red;
+    }
+
+    #creasSelect3 {
+      font-size: 16px;
+      border-radius: 25px;
+      justify-content: center;
+      padding: 5px;
+      min-width: 300px;
+      color: green;
+      font-weight: bold;
+    }
+
+    #selectBairro {
+      font-size: 16px;
+      border-radius: 25px;
+      justify-content: center;
+      padding: 5px;
+      min-width: 300px;
+    }
+
+    footer {
+      
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .linkLongo {
+      margin-top: 0;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      background-image: url('Imagens/logomarca-cutout.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .linkCurto {
+      margin-top: 0;
+      height: 40px;
+      max-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      background-image: url('Imagens/linkCurto-cutout.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .container {
+      margin: 0 auto;
+      width: 940px;
+    }
+
+    .link-personalizado1 {
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      margin-top: 0;
+      padding: 10px;
+      font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
+      cursor: pointer;
+    }
+
+ 
+    /* Incluir e Excluir Bairro */
+
+    #incluirB_Input {
+      font-size: 16px;
+      padding: 10px 35px 10px 35px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      max-width: 290px;
+      background: #fff url('Imagens/pencil.png') no-repeat 10px center;
+      background-size: 20px 20px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      width: 940px;
+    }
+    
+    .botao_enviar {
+      font-size: 16px;
+      border: none;
+    }
+
+
+  
+
+

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>CREAS Goiânia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="consulta.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="icon" href="Imagens/favicon.png" type="image/png"> 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+</head>
+  
+<body>
+
+<header>
+  <img src="Imagens/2-creas-logo.jpeg" style="width: 110px; margin-bottom: 10px; margin-right: 50px;">
+  <img src="Imagens/Logo-cutout.png" style="width: 80px; margin-bottom: 10px;">
+  <p>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</p>
+  <p>Superintendência de Assistência Social</p>
+  <p>Diretoria de Proteção Social Especial</p>
+  <p>Gerência de Proteção Social de Média Complexidade</p>
+</header>
+
+<!--<h1 id="logomarca">CREAS GOIÂNIA</h1>-->
+
+<div class="tabs">
+  <div class="tab active" onclick="trocarAba('aba1')">Incluir Bairro</div>
+  <div class="tab" onclick="trocarAba('aba2')">Excluir Bairro</div>
+</div>
+
+<!-- Aba 1 -->
+<div id="aba1" class="tab-content active">
+  <h3 id="titulo-bairro" style="text-align: center;">SOLICITAR INCLUSÃO DE BAIRRO</h3>
+  <p>1º. Insira no campo abaixo o nome do bairro que não foi localizado:</p>
+
+<form action="https://formsubmit.co/gerenciamediacomplexidade@gmail.com" method="POST">
+  <input type="text" id="incluirB_Input" name="Bairro a ser incluído" placeholder="Digite o nome do bairro..." style="text-align: center;  display: block; margin: 0 auto;" required>
+  <p></p>
+  <p>2º.Selecione, na listagem abaixo, o nome do CREAS que atende ao bairro inserido:</p>
+  <select name="Está no território do CREAS" id="creasSelect1" style="border-radius: 5px; text-align: center; display: block; margin: 0 auto;" required>
+    <option value="">Selecione o CREAS de abrangência</option>  
+  </select>
+  <p></p>
+  <button onclick="Swal.fire('Enviado!', 'Seu formulário foi enviado com sucesso!', 'success')" type="submit" class="link-personalizado1 linkCurto container botao_enviar">Enviar</button>
+
+  <!-- Configurações opcionais -->
+  <input type="hidden" name="_next" value="https://gersmc-goiania.github.io/creasgoiania/">
+  <input type="hidden" name="_captcha" value="false">
+  
+</form>
+
+  <p></p>
+</div>
+
+<!-- Aba 2 -->
+<div id="aba2" class="tab-content">
+  <h3 id="titulo-creas" style="text-align: center;">SOLICITAR EXCLUSÃO OU ALTERAÇÃO DE BAIRRO POR TERRITÓRIO</h3>
+
+<p>1º.Selecione o CREAS que contém o bairro que não é de sua abrangência:</p>
+<form action="https://formsubmit.co/gerenciamediacomplexidade@gmail.com" method="POST">
+  <select id="creasSelect2" name="CREAS" placeholder="Selecione um CREAS..." style="border-radius: 5px; text-align: center; display: block; margin: 0 auto;">
+    <option value="">Selecione um CREAS...</option> 
+  </select>
+  <p></p>
+ <p>2º.Selecione o bairro que está na abrangência incorreta:</p>
+  <select id="selectBairro" name="Bairro a ser ALTERADO OU EXCLUÍDO" style="border-radius: 5px; text-align: center; display: block; margin: 0 auto;">
+    <option value="">Selecione um bairro...</option>  
+  </select>
+  <p></p>
+   <p>3ª.Selecione o CREAS do qual o bairro está devidamente em seu território:</p>
+  <select id="creasSelect3" name="CREAS correto:" style="border-radius: 5px; text-align: center; display: block; margin: 0 auto;">
+    <option value="">Selecione o CREAS correto...</option>
+    <option value="" style="color:black">Desconheço o CREAS correto</option>  
+  </select>
+  <p></p>
+  <button onclick="Swal.fire('Enviado!', 'Seu formulário foi enviado com sucesso!', 'success')" type="submit" class="link-personalizado1 linkCurto container botao_enviar">Enviar</button>
+
+  <!-- Configurações opcionais -->
+  <input type="hidden" name="_next" value="https://gersmc-goiania.github.io/creasgoiania/">
+  <input type="hidden" name="_captcha" value="false">
+</form>
+</div>
+
+</body>
+
+<!--Rodapé-->
+<footer>
+  <h4><a href="/index.html" class="link-personalizado1 linkLongo">Voltar à Página Inicial</a></h4>
+</footer>
+
+<!--Script-->
+<script src="funcoes.js"></script>
+
+</html>

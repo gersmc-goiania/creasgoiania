@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>CREAS Goiânia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="consulta.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.png" type="image/png">  
+</head>
+  
+<body>
+
+<header>
+  <img src="Imagens/2-creas-logo.jpeg" style="width: 110px; margin-bottom: 10px; margin-right: 50px;">
+  <img src="Imagens/Logo-cutout.png" style="width: 80px; margin-bottom: 10px;">
+  <p>Secretaria Municipal de Política para as Mulheres, Assistência Social e Direitos Humanos</p>
+  <p>Superintendência de Assistência Social</p>
+  <p>Diretoria de Proteção Social Especial</p>
+  <p>Gerência de Proteção Social de Média Complexidade</p>
+</header>
+
+<h1 id="logomarca">CREAS GOIÂNIA</h1>
+
+
+
+<div class="tabs">
+  
+  <div class="tab active" onclick="trocarAba('aba1')">Pesquisa por Bairro</div>
+  <div class="tab" onclick="trocarAba('aba2')">Pesquisa por CREAS</div>
+</div>
+
+<!-- Aba 1 -->
+<div id="aba1" class="tab-content active">
+  <h2 id="titulo-bairro">CONSULTA DE CREAS POR BAIRRO</h2>
+  <input type="text" id="bairroInput" placeholder="Digite o nome do bairro..." oninput="mostrarSugestoes()">
+  <ul id="sugestoes"></ul>
+  <div id="resultado"></div>
+</div>
+
+<!-- Aba 2 -->
+<div id="aba2" class="tab-content">
+  <h2 id="titulo-creas">LISTA DE BAIRROS POR CREAS</h2>
+  <select id="creasSelect1" onchange="mostrarBairrosPorCreas(creasSelect1)">
+    <option value="">Selecione um CREAS...</option>
+  </select>
+  <ul id="bairrosPorCreas"></ul>
+</div>
+
+</body>
+
+<!--Script estava aqui-->
+<script src="funcoes.js"></script>
+
+<!--Rodapé-->
+<footer>
+  <h4><a href="/alterarbairro.html" class="linkLongo link-personalizado1">Incluir ou excluir bairro por CREAS</a></h4>
+</footer>
+
+</html>
