@@ -84,35 +84,6 @@
       font-weight: bold;
     }
 
-    @media (max-width: 600px) {
-      body {
-        padding: 15px;
-      }
-
-      h2#titulo {
-        font-size: 20px;
-      }
-
-      input {
-        font-size: 16px;
-      }
-
-      #resultado {
-        font-size: 16px;
-      }
-    }
-
-        h1#site {
-            text-align: center;
-        }
-
-             .tabs {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-      border-bottom: 2px solid #ccc;
-    }
-
     .tab {
       padding: 10px 20px;
       cursor: pointer;
@@ -159,6 +130,7 @@
       border-radius: 25px;
       justify-content: center;
       padding: 5px;
+      border: 1px solid #ccc;
     }
 
     #creasSelect2 {
@@ -168,6 +140,7 @@
       padding: 5px;
       min-width: 300px;
       color: red;
+      border: 1px solid #ccc;
     }
 
     #creasSelect3 {
@@ -178,6 +151,7 @@
       min-width: 300px;
       color: green;
       font-weight: bold;
+      border: 1px solid #ccc;
     }
 
     #selectBairro {
@@ -186,6 +160,7 @@
       justify-content: center;
       padding: 5px;
       min-width: 300px;
+      border: 1px solid #ccc;
     }
 
     footer {
@@ -259,6 +234,35 @@
     .botao_enviar {
       font-size: 16px;
       border: none;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2#titulo {
+        font-size: 20px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #resultado {
+        font-size: 16px;
+      }
+    }
+
+        h1#site {
+            text-align: center;
+        }
+
+             .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      border-bottom: 2px solid #ccc;
     }
 
 
