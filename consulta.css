@@ -15,17 +15,15 @@
       line-height: 1.2;
     }
 
-    h1#logomarca {
+  h1#logomarca {
       text-align: center;
       margin-top: 0;
       font-size: 30px;
-      padding: 30px;
+      padding: 15px;
       color: #fff;
       font-family: 'Montserrat', 'Palatino Linotype', sans-serif;
-      background-image: url('Imagens/logomarca-cutout.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
+      border-radius: 40px;
+      background-color: #1DC98A;
     }
 
     h2#titulo-bairro {
