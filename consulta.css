@@ -256,11 +256,34 @@
             text-align: center;
         }
 
-             .tabs {
+    .tabs {
       display: flex;
       justify-content: center;
       margin: 20px 0;
       border-bottom: 2px solid #ccc;
+    }
+
+    .secreto {
+      text-decoration: none;
+      cursor: text;
+    }
+
+    .secreto:link {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
+    }
+
+    .secreto:visited {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
+    }
+
+    .secreto:hover {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
     }
 
 
