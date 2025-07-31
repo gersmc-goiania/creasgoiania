@@ -1,3 +1,26 @@
+    .secreto {
+      text-decoration: none;
+      cursor: text;
+    }
+
+    .secreto:link {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
+    }
+
+    .secreto:visited {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
+    }
+
+    .secreto:hover {
+      text-decoration: none;
+      color: #000;
+      cursor: text;
+    }
+
     body {
       font-family: arial, sans-serif;
       padding: 20px;
@@ -263,28 +286,7 @@
       border-bottom: 2px solid #ccc;
     }
 
-    .secreto {
-      text-decoration: none;
-      cursor: text;
-    }
 
-    .secreto:link {
-      text-decoration: none;
-      color: #000;
-      cursor: text;
-    }
-
-    .secreto:visited {
-      text-decoration: none;
-      color: #000;
-      cursor: text;
-    }
-
-    .secreto:hover {
-      text-decoration: none;
-      color: #000;
-      cursor: text;
-    }
 
 
   
