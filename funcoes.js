@@ -86,7 +86,7 @@
       creasSelect3.appendChild(opt3);
     });
 
-//Adicionei isso aqui para o preenchimento do 2 select, aba 2, pagina 2
+//Preenchimento do 2 select, aba 2, pagina 2
      if (creasSelect2) {
         creasSelect2.addEventListener('change', function () {
         preencherBairrosPorCreas(this.value);
@@ -183,5 +183,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", carregarDados);
+
 
   
