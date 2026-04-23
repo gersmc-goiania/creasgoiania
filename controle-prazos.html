@@ -119,33 +119,30 @@
 
 <script>
 
-// Criar data corretamente no fuso local
+// Criar data no padrão local (sem bug de fuso)
 function criarDataLocal(dataString) {
-    let partes = dataString.split("-");
-    let data = new Date(partes[0], partes[1] - 1, partes[2]);
+    let [ano, mes, dia] = dataString.split("-");
+    let data = new Date(ano, mes - 1, dia);
     data.setHours(0,0,0,0);
     return data;
 }
 
 // Zerar hora
 function zerarHora(data) {
-    let nova = new Date(data);
-    nova.setHours(0,0,0,0);
-    return nova;
+    let d = new Date(data);
+    d.setHours(0,0,0,0);
+    return d;
 }
 
 // Adicionar dias úteis
 function adicionarDiasUteis(data, dias) {
     let resultado = new Date(data);
-    let adicionados = 0;
+    let count = 0;
 
-    while (adicionados < dias) {
+    while (count < dias) {
         resultado.setDate(resultado.getDate() + 1);
-        let diaSemana = resultado.getDay();
-
-        if (diaSemana !== 0 && diaSemana !== 6) {
-            adicionados++;
-        }
+        let dia = resultado.getDay();
+        if (dia !== 0 && dia !== 6) count++;
     }
 
     return zerarHora(resultado);
@@ -158,31 +155,29 @@ function adicionarDiasCorridos(data, dias) {
     return zerarHora(resultado);
 }
 
-// Dias úteis entre datas
-function diasUteisEntre(inicio, fim) {
+// 🔥 DIFERENÇA REAL EM DIAS CORRIDOS (CORRETO)
+function diferencaDiasCorridos(inicio, fim) {
+    let i = zerarHora(inicio);
+    let f = zerarHora(fim);
+
+    return Math.max(0, Math.round((f - i) / (1000 * 60 * 60 * 24)));
+}
+
+// 🔥 DIFERENÇA REAL EM DIAS ÚTEIS (CORRETO)
+function diferencaDiasUteis(inicio, fim) {
     let count = 0;
-    let data = new Date(inicio);
+    let data = zerarHora(inicio);
 
     while (data < fim) {
         data.setDate(data.getDate() + 1);
-        let diaSemana = data.getDay();
+        let dia = data.getDay();
 
-        if (diaSemana !== 0 && diaSemana !== 6) {
+        if (dia !== 0 && dia !== 6) {
             count++;
         }
     }
 
-    return Math.max(0, count);
-}
-
-// Dias corridos entre datas (CORRIGIDO)
-function diasCorridosEntre(inicio, fim) {
-    let inicioZ = zerarHora(inicio);
-    let fimZ = zerarHora(fim);
-
-    const diff = fimZ - inicioZ;
-
-    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+    return count;
 }
 
 function calcular() {
@@ -196,7 +191,7 @@ function calcular() {
 
     let dataInicial = criarDataLocal(dataRecebimentoStr);
 
-    // === REGRAS DA CIRCULAR ===
+    // Regras
     let prazoInterno;
     let regra;
 
@@ -211,19 +206,18 @@ function calcular() {
         regra = "Urgente: resposta em até 48 horas.";
     }
 
-    // === CÁLCULO DIAS ÚTEIS ===
+    // Datas
     let dataFinalUtil = adicionarDiasUteis(dataInicial, prazoExterno);
     let dataLimiteUtil = adicionarDiasUteis(dataInicial, prazoInterno);
 
-    // === CÁLCULO DIAS CORRIDOS ===
     let dataFinalCorrido = adicionarDiasCorridos(dataInicial, prazoExterno);
     let dataLimiteCorrido = adicionarDiasCorridos(dataInicial, prazoInterno);
 
-    // Hoje (normalizado)
     let hoje = zerarHora(new Date());
 
-    let diasUteisRestantes = diasUteisEntre(hoje, dataLimiteUtil);
-    let diasCorridosRestantes = diasCorridosEntre(hoje, dataLimiteCorrido);
+    // 🔥 AGORA CORRETO
+    let diasCorridosRestantes = diferencaDiasCorridos(hoje, dataLimiteCorrido);
+    let diasUteisRestantes = diferencaDiasUteis(hoje, dataLimiteUtil);
 
     function formatar(data) {
         return data.toLocaleDateString("pt-BR");
@@ -242,7 +236,6 @@ function calcular() {
                     <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
                     <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
                     <p><strong>📆 Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
-                    <p><strong>📅 Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
             </div>
 
@@ -251,7 +244,6 @@ function calcular() {
                 <div class="conteudo">
                     <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
                     <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
-                    <p><strong>📆 Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
                     <p><strong>📅 Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
             </div>
