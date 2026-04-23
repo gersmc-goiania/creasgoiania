@@ -127,7 +127,7 @@ function criarDataLocal(dataString) {
     return data;
 }
 
-// Zerar hora (evita erros de cálculo)
+// Zerar hora
 function zerarHora(data) {
     let nova = new Date(data);
     nova.setHours(0,0,0,0);
@@ -175,13 +175,14 @@ function diasUteisEntre(inicio, fim) {
     return Math.max(0, count);
 }
 
-// Dias corridos entre datas (corrigido)
+// Dias corridos entre datas (CORRIGIDO)
 function diasCorridosEntre(inicio, fim) {
     let inicioZ = zerarHora(inicio);
     let fimZ = zerarHora(fim);
 
     const diff = fimZ - inicioZ;
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+
+    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
 }
 
 function calcular() {
@@ -240,7 +241,8 @@ function calcular() {
                 <div class="conteudo">
                     <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
                     <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
-                    <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
+                    <p><strong>📆 Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
+                    <p><strong>📅 Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
             </div>
 
@@ -249,7 +251,8 @@ function calcular() {
                 <div class="conteudo">
                     <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
                     <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
-                    <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
+                    <p><strong>📆 Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
+                    <p><strong>📅 Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
             </div>
 
