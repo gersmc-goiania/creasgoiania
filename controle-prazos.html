@@ -54,6 +54,33 @@
         border-radius: 8px;
         line-height: 1.6;
     }
+
+    .linha-topo {
+    margin-bottom: 15px;
+    }
+    
+    .grid-resultados {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .coluna {
+        background: #f9fbfd;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .titulo {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .linha-final {
+        margin-top: 20px;
+        text-align: center;
+    }
 </style>
 </head>
 
@@ -172,17 +199,32 @@ function calcular() {
     }
 
     document.getElementById("resultado").innerHTML = `
-        <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
-                <p style="text-align: center;"><strong>Cálculo em dias úteis </strong></p>
-        <p><strong>⏳ Prazo externo final (dias úteis):</strong> ${formatar(dataFinalUtil)}</p>
-        <p><strong>⚠️ Data limite para resposta da unidade (dias úteis):</strong> ${formatar(dataLimiteUtil)}</p>
-        <p><strong>⚠️ Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
-            <p style="text-align: center"><strong>Cálculo em dias corridos </strong></p>
-        <p><strong>⏳ Prazo externo final (dias corridos):</strong> ${formatar(dataFinalCorrido)}</p>
-        <p><strong>⚠️ Data limite para resposta da unidade (dias corridos):</strong> ${formatar(dataLimiteCorrido)}</p>
-        <p><strong>⚠️ Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>     
-            <p style="text-align: center;"><strong>Regra aplicada</strong></p>
-        <p><strong>⚠️ Regra aplicada:</strong> ${regra}</p>
+            <div class="linha-topo">
+                <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
+            </div>
+        
+            <div class="grid-resultados">
+        
+                <div class="coluna">
+                    <p class="titulo">Cálculo em dias úteis</p>
+                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
+                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
+                    <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
+                </div>
+        
+                <div class="coluna">
+                    <p class="titulo">Cálculo em dias corridos</p>
+                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
+                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
+                    <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
+                </div>
+        
+            </div>
+        
+            <div class="linha-final">
+                <p class="titulo">Regra aplicada</p>
+                <p>${regra}</p>
+            </div>
     `;
 }
 
