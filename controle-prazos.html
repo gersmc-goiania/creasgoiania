@@ -66,21 +66,38 @@
     }
     
     .coluna {
-        background: #f9fbfd;
-        padding: 10px;
         border-radius: 8px;
+        overflow: hidden;
+        background: #f9fbfd;
     }
     
     .titulo {
         text-align: center;
         font-weight: bold;
         margin-bottom: 10px;
+        font-weight: bold;
     }
     
     .linha-final {
         margin-top: 20px;
         text-align: center;
     }
+
+    .cabecalho {
+        background: #007bff; /* mesma cor do botão */
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        padding: 10px;
+    }        
+
+    .linha-topo {
+        margin-bottom: 15px;
+    }
+    
+    .conteudo {
+        padding: 10px;
+    }    
 </style>
 </head>
 
@@ -206,17 +223,21 @@ function calcular() {
             <div class="grid-resultados">
         
                 <div class="coluna">
-                    <p class="titulo">Cálculo em dias úteis</p>
-                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
-                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
-                    <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
+                    <div class="cabecalho">Cálculo em dias úteis</div>
+                    <div class="conteudo">
+                        <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
+                        <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
+                        <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
+                    </div>
                 </div>
         
                 <div class="coluna">
-                    <p class="titulo">Cálculo em dias corridos</p>
-                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
-                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
-                    <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
+                    <div class="cabecalho">Cálculo em dias corridos</div>
+                    <div class="conteudo">
+                        <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
+                        <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
+                        <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
+                    </div>
                 </div>
         
             </div>
