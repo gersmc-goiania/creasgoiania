@@ -122,7 +122,16 @@
 // Criar data corretamente no fuso local
 function criarDataLocal(dataString) {
     let partes = dataString.split("-");
-    return new Date(partes[0], partes[1] - 1, partes[2]);
+    let data = new Date(partes[0], partes[1] - 1, partes[2]);
+    data.setHours(0,0,0,0);
+    return data;
+}
+
+// Zerar hora (evita erros de cálculo)
+function zerarHora(data) {
+    let nova = new Date(data);
+    nova.setHours(0,0,0,0);
+    return nova;
 }
 
 // Adicionar dias úteis
@@ -138,14 +147,15 @@ function adicionarDiasUteis(data, dias) {
             adicionados++;
         }
     }
-    return resultado;
+
+    return zerarHora(resultado);
 }
 
 // Adicionar dias corridos
 function adicionarDiasCorridos(data, dias) {
     let resultado = new Date(data);
     resultado.setDate(resultado.getDate() + dias);
-    return resultado;
+    return zerarHora(resultado);
 }
 
 // Dias úteis entre datas
@@ -161,13 +171,17 @@ function diasUteisEntre(inicio, fim) {
             count++;
         }
     }
-    return count;
+
+    return Math.max(0, count);
 }
 
-// Dias corridos entre datas
+// Dias corridos entre datas (corrigido)
 function diasCorridosEntre(inicio, fim) {
-    const diff = fim - inicio;
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    let inicioZ = zerarHora(inicio);
+    let fimZ = zerarHora(fim);
+
+    const diff = fimZ - inicioZ;
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
 function calcular() {
@@ -204,9 +218,8 @@ function calcular() {
     let dataFinalCorrido = adicionarDiasCorridos(dataInicial, prazoExterno);
     let dataLimiteCorrido = adicionarDiasCorridos(dataInicial, prazoInterno);
 
-    // Hoje
-    let hoje = new Date();
-    hoje.setHours(0,0,0,0);
+    // Hoje (normalizado)
+    let hoje = zerarHora(new Date());
 
     let diasUteisRestantes = diasUteisEntre(hoje, dataLimiteUtil);
     let diasCorridosRestantes = diasCorridosEntre(hoje, dataLimiteCorrido);
@@ -216,36 +229,36 @@ function calcular() {
     }
 
     document.getElementById("resultado").innerHTML = `
-            <div class="linha-topo">
-                <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
-            </div>
-        
-            <div class="grid-resultados">
-        
-                <div class="coluna">
-                    <div class="cabecalho">Cálculo em dias úteis</div>
-                    <div class="conteudo">
-                        <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
-                        <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
-                        <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
-                    </div>
+        <div class="linha-topo">
+            <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
+        </div>
+
+        <div class="grid-resultados">
+
+            <div class="coluna">
+                <div class="cabecalho">Cálculo em dias úteis</div>
+                <div class="conteudo">
+                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
+                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
+                    <p><strong>⚠️ Dias restantes:</strong> ${diasUteisRestantes}</p>
                 </div>
-        
-                <div class="coluna">
-                    <div class="cabecalho">Cálculo em dias corridos</div>
-                    <div class="conteudo">
-                        <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
-                        <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
-                        <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
-                    </div>
+            </div>
+
+            <div class="coluna">
+                <div class="cabecalho">Cálculo em dias corridos</div>
+                <div class="conteudo">
+                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
+                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
+                    <p><strong>⚠️ Dias restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
-        
             </div>
-        
-            <div class="linha-final">
-                <p class="titulo">Regra aplicada</p>
-                <p>${regra}</p>
-            </div>
+
+        </div>
+
+        <div class="linha-final">
+            <p class="titulo">Regra aplicada</p>
+            <p>${regra}</p>
+        </div>
     `;
 }
 
