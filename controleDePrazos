@@ -12,7 +12,7 @@
     }
 
     .container {
-        max-width: 600px;
+        max-width: 650px;
         margin: auto;
         background: white;
         padding: 20px;
@@ -52,6 +52,7 @@
         background: #eef3f7;
         padding: 15px;
         border-radius: 8px;
+        line-height: 1.6;
     }
 </style>
 </head>
@@ -64,7 +65,7 @@
     <label>📅 Data de recebimento</label>
     <input type="date" id="dataRecebimento">
 
-    <label>⏳ Prazo externo (dias úteis)</label>
+    <label>⏳ Prazo externo (dias)</label>
     <input type="number" id="prazoExterno">
 
     <button onclick="calcular()">Calcular</button>
@@ -93,6 +94,13 @@ function adicionarDiasUteis(data, dias) {
             adicionados++;
         }
     }
+    return resultado;
+}
+
+// Adicionar dias corridos
+function adicionarDiasCorridos(data, dias) {
+    let resultado = new Date(data);
+    resultado.setDate(resultado.getDate() + dias);
     return resultado;
 }
 
@@ -129,33 +137,35 @@ function calcular() {
 
     let dataInicial = criarDataLocal(dataRecebimentoStr);
 
-    // Data final externa
-    let dataFinalExterna = adicionarDiasUteis(dataInicial, prazoExterno);
-
+    // === REGRAS DA CIRCULAR ===
     let prazoInterno;
     let regra;
 
-    // Regras da circular
     if (prazoExterno > 20) {
         prazoInterno = prazoExterno - 5;
-        regra = "Ordinário: resposta até 5 dias úteis antes do prazo externo.";
+        regra = "Ordinário: resposta até 5 dias antes do prazo externo.";
     } else if (prazoExterno >= 10) {
         prazoInterno = prazoExterno - 3;
-        regra = "Prioritário: resposta até 3 dias úteis antes do prazo externo.";
+        regra = "Prioritário: resposta até 3 dias antes do prazo externo.";
     } else {
-        prazoInterno = 2; // 48h
+        prazoInterno = 2;
         regra = "Urgente: resposta em até 48 horas.";
     }
 
-    // Data limite da unidade
-    let dataLimite = adicionarDiasUteis(dataInicial, prazoInterno);
+    // === CÁLCULO DIAS ÚTEIS ===
+    let dataFinalUtil = adicionarDiasUteis(dataInicial, prazoExterno);
+    let dataLimiteUtil = adicionarDiasUteis(dataInicial, prazoInterno);
 
-    // Hoje (zerando horas)
+    // === CÁLCULO DIAS CORRIDOS ===
+    let dataFinalCorrido = adicionarDiasCorridos(dataInicial, prazoExterno);
+    let dataLimiteCorrido = adicionarDiasCorridos(dataInicial, prazoInterno);
+
+    // Hoje
     let hoje = new Date();
     hoje.setHours(0,0,0,0);
 
-    let diasUteisRestantes = diasUteisEntre(hoje, dataLimite);
-    let diasCorridosRestantes = diasCorridosEntre(hoje, dataLimite);
+    let diasUteisRestantes = diasUteisEntre(hoje, dataLimiteUtil);
+    let diasCorridosRestantes = diasCorridosEntre(hoje, dataLimiteCorrido);
 
     function formatar(data) {
         return data.toLocaleDateString("pt-BR");
@@ -163,12 +173,24 @@ function calcular() {
 
     document.getElementById("resultado").innerHTML = `
         <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
-        <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalExterna)}</p>
-        <p><strong>⚠️ Data limite para resposta da unidade:</strong> ${formatar(dataLimite)}</p>
+
+        <br>
+
+        <p><strong>⏳ Prazo externo final (dias úteis):</strong> ${formatar(dataFinalUtil)}</p>
+        <p><strong>⚠️ Data limite para resposta da unidade (dias úteis):</strong> ${formatar(dataLimiteUtil)}</p>
         <p><strong>⚠️ Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
+        <p><strong>🏁 Data estimada de envio ao demandante:</strong> ${formatar(dataFinalUtil)}</p>
+
+        <br>
+
+        <p><strong>⏳ Prazo externo final (dias corridos):</strong> ${formatar(dataFinalCorrido)}</p>
+        <p><strong>⚠️ Data limite para resposta da unidade (dias corridos):</strong> ${formatar(dataLimiteCorrido)}</p>
         <p><strong>⚠️ Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
+        <p><strong>🏁 Data estimada de envio ao demandante:</strong> ${formatar(dataFinalCorrido)}</p>
+
+        <br>
+
         <p><strong>⚠️ Regra aplicada:</strong> ${regra}</p>
-        <p><strong>🏁 Data estimada de envio ao demandante:</strong> ${formatar(dataFinalExterna)}</p>
     `;
 }
 
