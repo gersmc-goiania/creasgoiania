@@ -59,11 +59,6 @@
     margin-bottom: 15px;
     }
     
-    .grid-resultados {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
     
     .coluna {
         border-radius: 8px;
@@ -215,8 +210,13 @@ function calcular() {
 
     let hoje = zerarHora(new Date());
 
-    // 🔥 AGORA CORRETO
+    // 
     let diasCorridosRestantes = diferencaDiasCorridos(hoje, dataLimiteCorrido);
+    
+    if(diasCorridosRestantes === 0){
+      diasCorridosRestantes = 'resposta em até 48 horas';
+    }
+
     let diasUteisRestantes = diferencaDiasUteis(hoje, dataLimiteUtil);
 
     function formatar(data) {
@@ -225,30 +225,18 @@ function calcular() {
 
     document.getElementById("resultado").innerHTML = `
         <div class="linha-topo">
-            <p><strong>📅 Data de recebimento:</strong> ${formatar(dataInicial)}</p>
+            
         </div>
 
-        <div class="grid-resultados">
-
             <div class="coluna">
-                <div class="cabecalho">Cálculo em dias úteis</div>
+                <div class="cabecalho">Cálculo em dias</div>
                 <div class="conteudo">
-                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalUtil)}</p>
-                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteUtil)}</p>
-                    <p><strong>📆 Dias úteis restantes:</strong> ${diasUteisRestantes}</p>
-                </div>
-            </div>
-
-            <div class="coluna">
-                <div class="cabecalho">Cálculo em dias corridos</div>
-                <div class="conteudo">
-                    <p><strong>⏳ Prazo externo final:</strong> ${formatar(dataFinalCorrido)}</p>
-                    <p><strong>⚠️ Data limite:</strong> ${formatar(dataLimiteCorrido)}</p>
+                    <p><strong>⏳ Prazo final para resposta ao demandante:</strong> ${formatar(dataFinalCorrido)}</p>
+                    <p><strong>⚠️ Data limite conforme Circular nº 01/2026:</strong> ${formatar(dataLimiteCorrido)}</p>
                     <p><strong>📅 Dias corridos restantes:</strong> ${diasCorridosRestantes}</p>
                 </div>
             </div>
 
-        </div>
 
         <div class="linha-final">
             <p class="titulo">Regra aplicada</p>
